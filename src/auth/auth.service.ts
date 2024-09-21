@@ -30,7 +30,7 @@ export class AuthService {
 
   private async generateToken(user: UserDocument) {
     return await this.jwtService.signAsync({
-      sub: user._id,
+      sub: user.id,
       address: user.address,
     });
   }
