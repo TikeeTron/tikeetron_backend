@@ -13,12 +13,18 @@ export class AuthController {
   @Post('sign-in-or-sign-up')
   @ApiCreatedResponse({
     example: {
-      user: {
-        id: '60f1b3b3b3b3b3b3b3b3b3b3',
-        address: 'T9yD14Nj9j7xAB4dbGeiX9h8JcCj9f5f',
+      status: true,
+      statusCode: 201,
+      data: {
+        user: {
+          id: '60f1b3b3b3b3b3b3b3b3b3b3',
+          address: 'T9yD14Nj9j7xAB4dbGeiX9h8JcCj9f5f',
+          createdAt: '2024-09-21T16:58:37.684Z',
+          updatedAt: '2024-09-21T16:58:37.684Z',
+        },
+        token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGYxYjNiM2IzYjNiM2IzYjNiM2IzYjMiLCJhZGRyZXNzIjoiVDl5RDE0TmpqOWh4OGpjQ2o5ZjVmIn0.1',
       },
-      token:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGYxYjNiM2IzYjNiM2IzYjNiM2IzYjMiLCJhZGRyZXNzIjoiVDl5RDE0TmpqOWh4OGpjQ2o5ZjVmIn0.1',
     },
   })
   async signInOrSignUp(@Body() signInOrSignUpDto: SignInOrSignUpDto) {
