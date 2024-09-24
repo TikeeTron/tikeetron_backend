@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { TicketType } from '../dto/ticket-type.dto'
 
 export type EventDocument = HydratedDocument<Event>;
 
@@ -7,6 +8,10 @@ export type EventDocument = HydratedDocument<Event>;
   timestamps: true,
 })
 export class Event {
+  // EventId on blockchain
+  @Prop({ isRequired: true, unique: true })
+  eventId: number;
+
   @Prop({ isRequired: true })
   name: string;
 
@@ -24,6 +29,9 @@ export class Event {
 
   @Prop({ isRequired: true })
   metadata: string;
+
+  @Prop({ isRequired: true })
+  ticketTypes: TicketType[];
 
   createdAt: Date;
   updatedAt: Date;
