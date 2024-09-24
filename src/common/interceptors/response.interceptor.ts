@@ -23,19 +23,13 @@ export class ResponseInterceptor implements NestInterceptor {
   errorHandler(exception: HttpException, context: ExecutionContext) {
     const ctx = context.switchToHttp();
     const response = ctx.getResponse();
-    const request = ctx.getRequest();
 
     const status =
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    response.status(status).json({
-      status: false,
-      statusCode: status,
-      message: exception.message,
-      data: exception,
-    });
+    response.status(status).json(exception.getResponse());
   }
 
   responseHandler(data: any, context: ExecutionContext) {
@@ -43,6 +37,17 @@ export class ResponseInterceptor implements NestInterceptor {
     const response = ctx.getResponse();
 
     const statusCode = response.statusCode;
+    const isPaginated = data.hasOwnProperty('data') && data.hasOwnProperty('meta');
+
+    if (isPaginated) {
+      const { data: _data, meta } = data;
+      return {
+        status: true,
+        statusCode,
+        data: _data,
+        meta,
+      };
+    }
 
     return {
       status: true,
