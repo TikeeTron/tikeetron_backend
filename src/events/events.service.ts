@@ -3,9 +3,9 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Event, EventDocument } from './schemas/event.schema';
-import mongoose, { Model, RootFilterQuery } from 'mongoose';
+import { Model, RootFilterQuery } from 'mongoose';
 import { QueryEventDto } from './dto/query-event.dto';
-import { Order, PageDto, PageMetaDto } from 'src/common/dto';
+import { Order, PageDto } from 'src/common/dto';
 
 @Injectable()
 export class EventsService {
@@ -49,13 +49,8 @@ export class EventsService {
     return new PageDto<Event>(data, query.page, query.take, itemCount);
   }
 
-  async findOne(id: string) {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new NotFoundException(`Invalid event ID: ${id}`);
-    }
-
-    const objectId = new mongoose.Types.ObjectId(id);
-    const event = await this.model.findById(objectId).exec();
+  async findOne(id: number) {
+    const event = await this.model.findOne({ eventId: id }).exec();
 
     if (!event) {
       throw new NotFoundException(`Event #${id} not found`);
@@ -63,16 +58,17 @@ export class EventsService {
     return event;
   }
 
-  async update(id: string, updateEventDto: UpdateEventDto) {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new NotFoundException(`Invalid event ID: ${id}`);
-    }
-
-    const objectId = new mongoose.Types.ObjectId(id);
+  async update(id: number, updateEventDto: UpdateEventDto) {
     const event = await this.model
-      .findByIdAndUpdate(objectId, updateEventDto, {
-        new: true,
-      })
+      .findOneAndUpdate(
+        {
+          eventId: id,
+        },
+        updateEventDto,
+        {
+          new: true,
+        },
+      )
       .exec();
 
     return event;

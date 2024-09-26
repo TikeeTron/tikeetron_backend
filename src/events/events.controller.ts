@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   Query,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
@@ -14,6 +13,8 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { Event } from './schemas/event.schema';
 import { QueryEventDto } from './dto/query-event.dto';
+import { QueryTicketsDto } from '../tickets/dto/query-tickets.dto';
+import { Ticket } from 'src/tickets/schemas/ticket.schema';
 
 @ApiTags('events')
 @ApiBearerAuth()
@@ -34,7 +35,7 @@ export class EventsController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.eventsService.findOne(id);
+    return await this.eventsService.findOne(+id);
   }
 
   @Patch(':id')
@@ -42,6 +43,6 @@ export class EventsController {
     @Param('id') id: string,
     @Body() updateEventDto: UpdateEventDto,
   ) {
-    return await this.eventsService.update(id, updateEventDto);
+    return await this.eventsService.update(+id, updateEventDto);
   }
 }
