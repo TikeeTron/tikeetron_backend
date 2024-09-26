@@ -11,6 +11,11 @@ export class QueryEventDto extends PageOptionsDto {
 
   @ApiPropertyOptional()
   @IsOptional()
+  @IsString()
+  category?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsDate()
   periodBegin?: Date;
 

@@ -27,6 +27,13 @@ export class EventsService {
       };
     }
 
+    if (query.category) {
+      where.category = {
+        $regex: query.category,
+        $options: 'i',
+      };
+    }
+
     if (query.periodBegin && query.periodEnd) {
       where.date = {
         $gte: query.periodBegin,

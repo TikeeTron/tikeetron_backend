@@ -13,8 +13,6 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { Event } from './schemas/event.schema';
 import { QueryEventDto } from './dto/query-event.dto';
-import { QueryTicketsDto } from '../tickets/dto/query-tickets.dto';
-import { Ticket } from 'src/tickets/schemas/ticket.schema';
 
 @ApiTags('events')
 @ApiBearerAuth()

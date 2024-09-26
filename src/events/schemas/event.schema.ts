@@ -19,6 +19,15 @@ export class Event {
   description: string;
 
   @Prop({ isRequired: true })
+  location: string;
+
+  @Prop({ isRequired: true })
+  capacity: number;
+
+  @Prop({ isRequired: true })
+  category: string;
+
+  @Prop({ isRequired: true })
   date: Date;
 
   @Prop({ isRequired: true })
@@ -38,3 +47,7 @@ export class Event {
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
+
+EventSchema.post('save', function (doc) {
+  console.log('%s has been saved', doc._id);
+})

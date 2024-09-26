@@ -26,6 +26,19 @@ export class CreateEventDto {
 
   @ApiProperty()
   @IsNotEmpty()
+  location: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  capacity: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  category: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
   date: Date;
 
   @ApiProperty()
