@@ -47,7 +47,3 @@ export class Event {
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
-
-EventSchema.post('save', function (doc) {
-  console.log('%s has been saved', doc._id);
-})
