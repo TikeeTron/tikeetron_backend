@@ -3,12 +3,16 @@ import { CreateIpfsDto, MetadataType } from './dto/create-ipfs.dto';
 import { upload } from 'thirdweb/storage';
 import { ConfigService } from '@nestjs/config';
 import { createThirdwebClient, ThirdwebClient } from 'thirdweb';
+import { EventsService } from 'src/events/events.service';
 
 @Injectable()
 export class IpfsService {
   client: ThirdwebClient;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly eventsService: EventsService,
+  ) {
     const clientId = this.configService.get<string>('THIRDWEB_CLIENT_ID');
     const secretKey = this.configService.get<string>('THIRDWEB_SECRET_KEY');
 
@@ -23,7 +27,7 @@ export class IpfsService {
     if (createIpfsDto.type === MetadataType.EVENT) {
       metadata = this.generateEventMetadata(createIpfsDto);
     } else {
-      metadata = this.generateTicketMetadata(createIpfsDto);
+      metadata = await this.generateTicketMetadata(createIpfsDto);
     }
     const storage = await upload({
       client: this.client,
@@ -46,10 +50,15 @@ export class IpfsService {
     };
   }
 
-  private generateTicketMetadata(createIpfsDto: CreateIpfsDto) {
+  private async generateTicketMetadata(createIpfsDto: CreateIpfsDto) {
+    const event = await this.eventsService.findOne(createIpfsDto.eventId);
+
     return {
-      eventName: createIpfsDto.eventName,
-      eventId: createIpfsDto.eventId,
+      event_id: createIpfsDto.eventId,
+      event_name: event.name,
+      event_category: event.category,
+      event_date: event.date,
+      event_location: event.location,
       type: createIpfsDto.ticketType,
       originalBuyer: createIpfsDto.buyerAddress,
       price: createIpfsDto.price,

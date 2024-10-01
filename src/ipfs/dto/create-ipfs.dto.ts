@@ -19,7 +19,7 @@ export class CreateIpfsDto {
 
   @ApiProperty()
   @IsOptional()
-  eventId: string;
+  eventId: number;
 
   @ApiProperty()
   @IsOptional()
