@@ -17,14 +17,19 @@ export class TicketsService {
   ) {}
 
   async create(createTicketDto: CreateTicketDto) {
-    const seatNumber = await this.generateSeatNumber(
-      createTicketDto.eventId,
-      createTicketDto.type,
-    );
-    return await this.model.create({
+    const event = await this.eventsService.findOne(createTicketDto.eventId);
+    const ticket = await this.model.create({
       ...createTicketDto,
-      seatNumber,
     });
+    event.ticketTypes.forEach((ticketType: TicketType) => {
+      if (ticketType.type === createTicketDto.type) {
+        ticketType.capacity -= 1;
+      }
+    })
+
+    await event.save();
+
+    return ticket;
   }
 
   async findAll(query: QueryTicketsDto) {
@@ -72,39 +77,6 @@ export class TicketsService {
       {
         new: true,
       },
-    );
-  }
-
-  private async generateSeatNumber(
-    eventId: number,
-    type: string,
-  ): Promise<string> {
-    const event = await this.eventsService.findOne(eventId);
-    const ticketType = event.ticketTypes.find(
-      (t: TicketType) => t.type === type,
-    );
-
-    if (!ticketType) {
-      throw new NotFoundException(
-        `Ticket type ${type} not found in event ${eventId}`,
-      );
-    }
-
-    const { rowSize, columnSize } = ticketType;
-
-    for (let row = 1; row <= rowSize; row++) {
-      for (let column = 1; column <= columnSize; column++) {
-        const seatNumber = `${type}-${row}${column}`;
-        const existingTicket = await this.model.findOne({ seatNumber });
-
-        if (!existingTicket) {
-          return seatNumber;
-        }
-      }
-    }
-
-    throw new NotFoundException(
-      `No available seats for ticket type ${type} in event ${eventId}`,
     );
   }
 }

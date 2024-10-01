@@ -4,6 +4,7 @@ import {
   IsArray,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   ValidateNested,
 } from 'class-validator';
 import { IsTronAddress } from 'src/common/decorators';
@@ -49,7 +50,7 @@ export class CreateEventDto {
   organizer: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   banner: string;
 
   @ApiProperty({

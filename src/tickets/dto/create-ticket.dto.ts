@@ -22,5 +22,9 @@ export class CreateTicketDto {
 
   @ApiProperty()
   @IsNotEmpty()
+  price: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
   metadataUrl: string;
 }

@@ -23,6 +23,9 @@ export class Ticket {
   type: string;
 
   @Prop({ isRequired: true })
+  price: number;
+
+  @Prop({ isRequired: true })
   metadataUrl: string;
 
   createdAt: Date;

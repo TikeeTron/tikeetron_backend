@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-import { TicketType } from '../dto/ticket-type.dto'
+import mongoose, { HydratedDocument } from 'mongoose';
+import { TicketType } from '../dto/ticket-type.dto';
+import { Organizer } from 'src/organizers/schemas/organizer.schema';
 
 export type EventDocument = HydratedDocument<Event>;
 
@@ -30,10 +31,15 @@ export class Event {
   @Prop({ isRequired: true })
   date: Date;
 
-  @Prop({ isRequired: true })
-  organizer: string;
+  @Prop({
+    isRequired: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Organizer.name,
+    autopopulate: true,
+  })
+  organizer: Organizer;
 
-  @Prop({ isRequired: true })
+  @Prop()
   banner: string;
 
   @Prop({ isRequired: true })

@@ -13,12 +13,7 @@ export class TicketType {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  columnSize: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  rowSize: number;
+  capacity: number;
 
   @ApiProperty()
   @IsNotEmpty()
