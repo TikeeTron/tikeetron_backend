@@ -13,6 +13,9 @@ async function bootstrap() {
   });
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(new ResponseInterceptor());
+  app.enableCors({
+    origin: '*',
+  });
 
   const config = new DocumentBuilder()
     .setTitle('TikeeTron API')
