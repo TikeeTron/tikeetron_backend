@@ -22,10 +22,19 @@ export class IpfsService {
     });
   }
 
-  async create(createIpfsDto: CreateIpfsDto) {
+  async create(createIpfsDto: CreateIpfsDto, banner: Express.Multer.File) {
+    let bannerUrl: string;
+    if (banner) {
+      const uploadedFile = await upload({
+        client: this.client,
+        files: [new File([banner.buffer], banner.originalname)],
+      });
+
+      bannerUrl = this.convertIpfsToHttp(uploadedFile);
+    }
     let metadata: Record<string, any> = {};
     if (createIpfsDto.type === MetadataType.EVENT) {
-      metadata = this.generateEventMetadata(createIpfsDto);
+      metadata = this.generateEventMetadata(createIpfsDto, bannerUrl);
     } else {
       metadata = await this.generateTicketMetadata(createIpfsDto);
     }
@@ -37,7 +46,10 @@ export class IpfsService {
     return this.convertIpfsToHttp(storage);
   }
 
-  private generateEventMetadata(createIpfsDto: CreateIpfsDto) {
+  private generateEventMetadata(
+    createIpfsDto: CreateIpfsDto,
+    bannerUrl: string,
+  ) {
     return {
       name: createIpfsDto.eventName,
       description: createIpfsDto.eventDescription,
@@ -45,8 +57,9 @@ export class IpfsService {
       location: createIpfsDto.eventLocation,
       capacity: createIpfsDto.eventCapacity,
       organizer: createIpfsDto.organizer,
-      banner: createIpfsDto.banner,
+      banner: bannerUrl,
       ticket_types: createIpfsDto.ticketTypes,
+      createdAt: new Date().toLocaleString(),
     };
   }
 
@@ -62,6 +75,7 @@ export class IpfsService {
       type: createIpfsDto.ticketType,
       originalBuyer: createIpfsDto.buyerAddress,
       price: createIpfsDto.price,
+      createdAt: new Date().toLocaleString(),
     };
   }
 

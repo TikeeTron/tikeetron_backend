@@ -1,6 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { ArrayMinSize, IsArray, IsEnum, IsInt, IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  ValidateNested,
+} from 'class-validator';
 import { IsTronAddress } from 'src/common/decorators';
 import { TicketType } from 'src/events/dto/ticket-type.dto';
 
@@ -10,72 +18,68 @@ export enum MetadataType {
 }
 
 export class CreateIpfsDto {
-  @ApiProperty({
+  @ApiPropertyOptional({
     enum: MetadataType,
   })
   @IsNotEmpty()
   @IsEnum(MetadataType)
   type: MetadataType;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   eventId: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   ticketType: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   buyerAddress: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   price: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   eventName: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   eventDescription: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   eventLocation: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   eventDate: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   eventCategory: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   eventCapacity: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsTronAddress('organizer')
   organizer: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
   @IsOptional()
-  banner: string;
+  banner: Express.Multer.File;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsArray()
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
   @Type(() => TicketType)
   ticketTypes: TicketType[];
-
-  @ApiProperty()
-  @IsOptional()
-  createdAt: string;
 }
