@@ -73,7 +73,7 @@ export class IpfsService {
       event_date: event.date,
       event_location: event.location,
       type: createIpfsDto.ticketType,
-      originalBuyer: createIpfsDto.buyerAddress,
+      original_buyer: createIpfsDto.buyerAddress,
       price: createIpfsDto.price,
       createdAt: new Date().toLocaleString(),
     };
