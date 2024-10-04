@@ -77,6 +77,10 @@ export class CreateIpfsDto {
 
   @ApiPropertyOptional()
   @IsOptional()
+  bannerUrl: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsArray()
   @ArrayMinSize(1)
   @ValidateNested({ each: true })

@@ -17,9 +17,6 @@ export class Ticket {
   buyerAddress: string;
 
   @Prop({ isRequired: true })
-  seatNumber: string;
-
-  @Prop({ isRequired: true })
   type: string;
 
   @Prop({ isRequired: true })

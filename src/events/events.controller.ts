@@ -51,9 +51,7 @@ export class EventsController {
             {
               type: 'string',
               price: 'string',
-              columnSize: 0,
-              rowSize: 0,
-              metadataUrl: 'string',
+              capacity: 0,
             },
           ],
           metadataUrl: 'string',

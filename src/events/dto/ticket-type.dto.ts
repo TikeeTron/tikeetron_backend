@@ -14,8 +14,4 @@ export class TicketType {
   @IsNotEmpty()
   @IsNumber()
   capacity: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  metadataUrl: string;
 }

@@ -33,7 +33,6 @@ export class TicketsController {
           ticketId: 0,
           eventId: 0,
           type: 'string',
-          seatNumber: 'string',
           buyerAddress: 'string',
           metadataUrl: 'string',
           createdAt: '2024-09-30T11:56:04.942Z',

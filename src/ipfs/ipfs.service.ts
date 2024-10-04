@@ -31,10 +31,11 @@ export class IpfsService {
       });
 
       bannerUrl = this.convertIpfsToHttp(uploadedFile);
+      return bannerUrl;
     }
     let metadata: Record<string, any> = {};
     if (createIpfsDto.type === MetadataType.EVENT) {
-      metadata = this.generateEventMetadata(createIpfsDto, bannerUrl);
+      metadata = this.generateEventMetadata(createIpfsDto);
     } else {
       metadata = await this.generateTicketMetadata(createIpfsDto);
     }
@@ -46,10 +47,7 @@ export class IpfsService {
     return this.convertIpfsToHttp(storage);
   }
 
-  private generateEventMetadata(
-    createIpfsDto: CreateIpfsDto,
-    bannerUrl: string,
-  ) {
+  private generateEventMetadata(createIpfsDto: CreateIpfsDto) {
     return {
       name: createIpfsDto.eventName,
       description: createIpfsDto.eventDescription,
@@ -57,7 +55,7 @@ export class IpfsService {
       location: createIpfsDto.eventLocation,
       capacity: createIpfsDto.eventCapacity,
       organizer: createIpfsDto.organizer,
-      banner: bannerUrl,
+      banner: createIpfsDto.bannerUrl,
       ticket_types: createIpfsDto.ticketTypes,
       createdAt: new Date().toLocaleString(),
     };
