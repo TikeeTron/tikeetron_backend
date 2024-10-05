@@ -26,7 +26,10 @@ export class Event {
   category: string;
 
   @Prop({ isRequired: true })
-  date: Date;
+  startDate: Date;
+
+  @Prop({ isRequired: true })
+  endDate: Date;
 
   @Prop({
     isRequired: true,

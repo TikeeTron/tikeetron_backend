@@ -3,7 +3,7 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Event, EventDocument } from './schemas/event.schema';
-import { Model, RootFilterQuery } from 'mongoose';
+import { isValidObjectId, Model, RootFilterQuery } from 'mongoose';
 import { QueryEventDto } from './dto/query-event.dto';
 import { Order, PageDto } from 'src/common/dto';
 import { OrganizersService } from 'src/organizers/organizers.service';
@@ -16,9 +16,13 @@ export class EventsService {
   ) {}
 
   async create(createEventDto: CreateEventDto): Promise<Event> {
-    const organizer = await this.organizersService.findOne(createEventDto.organizer);
+    const organizer = await this.organizersService.findOne(
+      createEventDto.organizer,
+    );
     if (!organizer) {
-      throw new NotFoundException(`Organizer #${createEventDto.organizer} not found`);
+      throw new NotFoundException(
+        `Organizer #${createEventDto.organizer} not found`,
+      );
     }
     const event = new this.model({
       ...createEventDto,
@@ -46,13 +50,13 @@ export class EventsService {
     }
 
     if (query.periodBegin && query.periodEnd) {
-      where.date = {
-        $gte: query.periodBegin,
+      where.startDate = {
         $lte: query.periodEnd,
       };
+      where.endDate = { $gte: query.periodBegin };
     }
 
-    if (query.organizer) {
+    if (query.organizer && isValidObjectId(query.organizer)) {
       where.organizer = query.organizer;
     }
 

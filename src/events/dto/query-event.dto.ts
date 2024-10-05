@@ -26,7 +26,6 @@ export class QueryEventDto extends PageOptionsDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsTronAddress('organizer')
   organizer?: string;
 
   @ApiPropertyOptional({ enum: Order, default: Order.DESC })
