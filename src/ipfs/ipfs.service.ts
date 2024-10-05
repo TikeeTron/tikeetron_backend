@@ -51,13 +51,13 @@ export class IpfsService {
     return {
       name: createIpfsDto.eventName,
       description: createIpfsDto.eventDescription,
-      date: createIpfsDto.eventDate,
+      start_date: createIpfsDto.eventStartDate,
+      end_date: createIpfsDto.eventEndDate,
       location: createIpfsDto.eventLocation,
-      capacity: createIpfsDto.eventCapacity,
       organizer: createIpfsDto.organizer,
       banner: createIpfsDto.bannerUrl,
       ticket_types: createIpfsDto.ticketTypes,
-      createdAt: new Date().toLocaleString(),
+      created_at: new Date().toLocaleString(),
     };
   }
 
@@ -68,12 +68,13 @@ export class IpfsService {
       event_id: createIpfsDto.eventId,
       event_name: event.name,
       event_category: event.category,
-      event_date: event.date,
+      event_start_date: event.startDate,
+      event_end_date: event.endDate,
       event_location: event.location,
       type: createIpfsDto.ticketType,
       original_buyer: createIpfsDto.buyerAddress,
       price: createIpfsDto.price,
-      createdAt: new Date().toLocaleString(),
+      created_at: new Date().toLocaleString(),
     };
   }
 

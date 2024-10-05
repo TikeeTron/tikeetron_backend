@@ -32,11 +32,6 @@ export class CreateEventDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  capacity: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
   category: string;
 
   @ApiProperty()

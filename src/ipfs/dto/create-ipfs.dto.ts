@@ -56,15 +56,15 @@ export class CreateIpfsDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  eventDate: string;
+  eventStartDate: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  eventEndDate: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   eventCategory: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  eventCapacity: number;
 
   @ApiPropertyOptional()
   @IsOptional()
