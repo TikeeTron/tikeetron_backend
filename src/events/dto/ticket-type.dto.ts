@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsDate, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class TicketType {
   @ApiProperty()
@@ -14,4 +14,14 @@ export class TicketType {
   @IsNotEmpty()
   @IsNumber()
   capacity: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsDate()
+  startDate: Date;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsDate()
+  endDate: Date;
 }

@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { IpfsService } from './ipfs.service';
 import { IpfsController } from './ipfs.controller';
 import { EventsModule } from 'src/events/events.module';
-import { EventsService } from 'src/events/events.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Event, EventSchema } from 'src/events/schemas/event.schema';
 
@@ -12,6 +11,6 @@ import { Event, EventSchema } from 'src/events/schemas/event.schema';
     MongooseModule.forFeature([{ name: Event.name, schema: EventSchema }]),
   ],
   controllers: [IpfsController],
-  providers: [IpfsService, EventsService],
+  providers: [IpfsService],
 })
 export class IpfsModule {}

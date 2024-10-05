@@ -3,15 +3,20 @@ import { SignInOrSignUpDto } from './dto/sign-in-or-sign-up.dto';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserDocument } from 'src/users/schemas/user.schema';
+import { OrganizersService } from 'src/organizers/organizers.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly organizersService: OrganizersService,
     private readonly jwtService: JwtService,
   ) {}
 
   async signInOrSignUp(signInOrSignUp: SignInOrSignUpDto) {
+    if (signInOrSignUp.isOrganizer) {
+      return await this.signInOrSignUpOrganizer(signInOrSignUp);
+    }
     let user = await this.usersService.findOne(signInOrSignUp.address);
 
     if (user) {
@@ -25,6 +30,24 @@ export class AuthService {
     return {
       user,
       token: await this.generateToken(user),
+    };
+  }
+
+  private async signInOrSignUpOrganizer(signInOrSignUp: SignInOrSignUpDto) {
+    let organizer = await this.organizersService.findOne(signInOrSignUp.address);
+
+    if (organizer) {
+      return {
+        organizer,
+        token: await this.generateToken(organizer),
+      };
+    }
+
+    organizer = await this.organizersService.create(signInOrSignUp);
+
+    return {
+      organizer,
+      token: await this.generateToken(organizer),
     };
   }
 

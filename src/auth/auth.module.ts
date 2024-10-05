@@ -6,10 +6,18 @@ import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './guard/jwt-auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { OrganizersModule } from 'src/organizers/organizers.module';
+import { OrganizersService } from 'src/organizers/organizers.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import {
+  Organizer,
+  OrganizerSchema,
+} from 'src/organizers/schemas/organizer.schema';
 
 @Module({
   imports: [
     UsersModule,
+    OrganizersModule,
     JwtModule.registerAsync({
       global: true,
       imports: [ConfigModule],

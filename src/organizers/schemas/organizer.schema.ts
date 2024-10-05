@@ -7,14 +7,14 @@ export type OrganizerDocument = HydratedDocument<Organizer>;
   timestamps: true,
 })
 export class Organizer {
-  @Prop({ isRequired: true })
-  name: string;
-
-  @Prop({ isRequired: true, default: 'https://www.gravatar.com/avatar/?d=mp' })
-  photoUrl: string;
-
   @Prop({ isRequired: true, unique: true })
   address: string;
+
+  @Prop({ default: 'Organizer' })
+  name: string;
+
+  @Prop({ default: 'https://www.gravatar.com/avatar/?d=mp' })
+  photoUrl: string;
 
   createdAt: Date;
   updatedAt: Date;

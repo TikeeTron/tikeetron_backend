@@ -23,9 +23,6 @@ export class Event {
   location: string;
 
   @Prop({ isRequired: true })
-  capacity: number;
-
-  @Prop({ isRequired: true })
   category: string;
 
   @Prop({ isRequired: true })
@@ -43,7 +40,7 @@ export class Event {
   banner: string;
 
   @Prop({ isRequired: true })
-  metadata: string;
+  metadataUrl: string;
 
   @Prop({ isRequired: true })
   ticketTypes: TicketType[];

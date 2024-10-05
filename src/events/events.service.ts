@@ -6,13 +6,24 @@ import { Event, EventDocument } from './schemas/event.schema';
 import { Model, RootFilterQuery } from 'mongoose';
 import { QueryEventDto } from './dto/query-event.dto';
 import { Order, PageDto } from 'src/common/dto';
+import { OrganizersService } from 'src/organizers/organizers.service';
 
 @Injectable()
 export class EventsService {
-  constructor(@InjectModel(Event.name) private readonly model: Model<Event>) {}
+  constructor(
+    @InjectModel(Event.name) private readonly model: Model<Event>,
+    private readonly organizersService: OrganizersService,
+  ) {}
 
   async create(createEventDto: CreateEventDto): Promise<Event> {
-    const event = new this.model(createEventDto);
+    const organizer = await this.organizersService.findOne(createEventDto.organizer);
+    if (!organizer) {
+      throw new NotFoundException(`Organizer #${createEventDto.organizer} not found`);
+    }
+    const event = new this.model({
+      ...createEventDto,
+      organizer: organizer._id,
+    });
 
     return await event.save();
   }

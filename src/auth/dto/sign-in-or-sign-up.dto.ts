@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsTronAddress } from 'src/common/decorators';
 import { IsNotEmpty } from 'class-validator';
 
@@ -9,4 +9,7 @@ export class SignInOrSignUpDto {
   @IsNotEmpty()
   @IsTronAddress('address')
   address: string;
+
+  @ApiPropertyOptional()
+  isOrganizer: boolean;
 }
