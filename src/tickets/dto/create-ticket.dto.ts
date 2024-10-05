@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 import { IsTronAddress } from 'src/common/decorators';
 
 export class CreateTicketDto {
@@ -21,6 +21,7 @@ export class CreateTicketDto {
   type: string;
 
   @ApiProperty()
+  @IsNumber()
   @IsNotEmpty()
   price: number;
 

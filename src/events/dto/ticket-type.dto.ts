@@ -7,8 +7,9 @@ export class TicketType {
   type: string;
 
   @ApiProperty()
+  @IsNumber()
   @IsNotEmpty()
-  price: string;
+  price: number;
 
   @ApiProperty()
   @IsNotEmpty()
