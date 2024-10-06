@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayMinSize,
   IsArray,
-  IsDate,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -36,12 +35,10 @@ export class CreateEventDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsDate()
   startDate: Date;
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsDate()
   endDate: Date;
 
   @ApiProperty()

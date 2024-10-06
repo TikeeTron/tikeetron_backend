@@ -19,6 +19,9 @@ export class Ticket {
   @Prop({ isRequired: true })
   type: string;
 
+  @Prop({ isRequired: true, default: false })
+  isUsed: boolean;
+
   @Prop({ isRequired: true })
   price: number;
 

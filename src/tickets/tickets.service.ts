@@ -25,7 +25,7 @@ export class TicketsService {
       if (ticketType.type === createTicketDto.type) {
         ticketType.capacity -= 1;
       }
-    })
+    });
 
     await event.save();
 

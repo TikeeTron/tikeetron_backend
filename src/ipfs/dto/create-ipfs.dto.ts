@@ -4,7 +4,6 @@ import {
   ArrayMinSize,
   IsArray,
   IsEnum,
-  IsInt,
   IsNotEmpty,
   IsOptional,
   ValidateNested,
@@ -39,7 +38,6 @@ export class CreateIpfsDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsInt()
   price: number;
 
   @ApiPropertyOptional()
