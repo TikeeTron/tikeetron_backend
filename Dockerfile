@@ -7,6 +7,9 @@ WORKDIR /usr/src/app
 # Install pnpm globally
 RUN npm install -g pnpm
 
+# Install NestJS CLI globally
+RUN npm install -g @nestjs/cli
+
 # Copy package.json and pnpm-lock.yaml into the container
 COPY package.json pnpm-lock.yaml ./
 
@@ -17,7 +20,7 @@ RUN pnpm install --prod
 COPY . .
 
 # Build the NestJS application
-RUN npx nest build
+RUN pnpm run build
 
 # Expose port 3000
 EXPOSE 3000
