@@ -4,20 +4,23 @@ FROM node:18-alpine
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.yaml into the container
-COPY package.json ./
+# Install pnpm globally
+RUN npm install -g pnpm
 
-# Install dependencies using npm
-RUN npm install --prod
+# Copy package.json and pnpm-lock.yaml into the container
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies using pnpm
+RUN pnpm install
 
 # Copy the rest of the application code into the container
 COPY . .
 
 # Build the NestJS application
-RUN npm run build
+RUN pnpm run build
 
 # Expose port 3000
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "run", "start:prod"]
+CMD ["pnpm", "run", "start:prod"]
