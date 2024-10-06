@@ -5,12 +5,15 @@ import {
   CallHandler,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
+  private logger = new Logger('ErrorInterceptor');
+
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     return next.handle().pipe(
       map((res: unknown) => this.responseHandler(res, context)),
@@ -23,6 +26,7 @@ export class ResponseInterceptor implements NestInterceptor {
   errorHandler(exception: HttpException, context: ExecutionContext) {
     const ctx = context.switchToHttp();
     const response = ctx.getResponse();
+    this.logger.error(exception.message);
 
     const status =
       exception instanceof HttpException
@@ -37,7 +41,8 @@ export class ResponseInterceptor implements NestInterceptor {
     const response = ctx.getResponse();
 
     const statusCode = response.statusCode;
-    const isPaginated = data.hasOwnProperty('data') && data.hasOwnProperty('meta');
+    const isPaginated =
+      data.hasOwnProperty('data') && data.hasOwnProperty('meta');
 
     if (isPaginated) {
       const { data: _data, meta } = data;
