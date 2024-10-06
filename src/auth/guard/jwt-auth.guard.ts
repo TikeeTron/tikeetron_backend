@@ -22,7 +22,6 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
     if (isPublic) {
-      // 💡 See this condition
       return true;
     }
 
@@ -30,47 +29,60 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+
+    let basicAuthResult = false;
     if (isBasicAuth) {
-      return this.handleBasicAuth(context);
+      basicAuthResult = await this.tryBasicAuth(context);
     }
 
+    // If basic auth succeeds, skip further checks
+    if (basicAuthResult) {
+      return true;
+    }
+
+    // Otherwise, continue to validate JWT token
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
     }
+
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException();
     }
+
     return true;
   }
 
-  private handleBasicAuth(context: ExecutionContext): boolean | PromiseLike<boolean> {
+  private async tryBasicAuth(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const auth = request.headers.authorization;
-    if (!auth) {
-      throw new UnauthorizedException();
+
+    if (!auth || !auth.startsWith('Basic ')) {
+      return false; // No basic auth header, continue to the next auth check
     }
 
-    const [username, password] = Buffer.from(auth.split(' ')[1], 'base64')
-      .toString()
-      .split(':');
+    try {
+      const [username, password] = Buffer.from(auth.split(' ')[1], 'base64')
+        .toString()
+        .split(':');
 
-    if (
-      process.env.HTTP_BASIC_USER === username &&
-      process.env.HTTP_BASIC_PASSWORD === password
-    ) {
-      return true;
+      if (
+        process.env.HTTP_BASIC_USER === username &&
+        process.env.HTTP_BASIC_PASSWORD === password
+      ) {
+        return true; // Basic auth succeeded
+      }
+    } catch {
+      return false; // Parsing error, continue to the next auth check
     }
 
-    throw new UnauthorizedException();
+    return false; // Basic auth failed, continue to the next auth check
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
