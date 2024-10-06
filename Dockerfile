@@ -17,7 +17,7 @@ RUN pnpm install --prod
 COPY . .
 
 # Build the NestJS application
-RUN pnpm run build
+RUN npx nest build
 
 # Expose port 3000
 EXPOSE 3000
