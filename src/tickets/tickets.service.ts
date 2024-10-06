@@ -68,7 +68,7 @@ export class TicketsService {
   }
 
   async findOne(id: number) {
-    return await this.model.findOne({ ticketId: id });
+    return await this.model.findOne({ ticketId: id }).populate('event');
   }
 
   async update(id: number, updateTicketDto: UpdateTicketDto) {
