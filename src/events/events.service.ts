@@ -13,7 +13,7 @@ export class EventsService {
   constructor(
     @InjectModel(Event.name) private readonly model: Model<Event>,
     private readonly organizersService: OrganizersService,
-  ) {}
+  ) { }
 
   async create(createEventDto: CreateEventDto): Promise<Event> {
     const organizer = await this.organizersService.findOne(
@@ -58,6 +58,12 @@ export class EventsService {
 
     if (query.organizer && isValidObjectId(query.organizer)) {
       where.organizer = query.organizer;
+    }
+
+    if (query.eventIds) {
+      where.eventId = {
+        $in: query.eventIds,
+      };
     }
 
     const itemCount = await this.model.find(where).countDocuments();
