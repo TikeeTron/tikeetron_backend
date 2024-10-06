@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDate, IsEnum, IsOptional } from 'class-validator';
+import { IsArray, IsDate, IsEnum, IsOptional } from 'class-validator';
 import { IsTronAddress } from 'src/common/decorators';
 import { Order, PageOptionsDto } from 'src/common/dto';
 
@@ -7,6 +7,14 @@ export class QueryTicketsDto extends PageOptionsDto {
   @ApiPropertyOptional()
   @IsOptional()
   eventId?: number;
+
+  @ApiPropertyOptional({
+    isArray: true,
+    type: Number,
+  })
+  @IsOptional()
+  @IsArray()
+  ticketIds?: number[];
 
   @ApiPropertyOptional()
   @IsOptional()

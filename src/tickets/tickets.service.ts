@@ -55,6 +55,12 @@ export class TicketsService {
       where.buyerAddress = query.buyerAddress;
     }
 
+    if (query.ticketIds) {
+      where.ticketId = {
+        $in: query.ticketIds,
+      };
+    }
+
     const itemCount = await this.model.find(where).countDocuments();
     const data = await this.model
       .find(where)
