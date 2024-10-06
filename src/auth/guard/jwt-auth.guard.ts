@@ -7,14 +7,14 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { IS_PUBLIC_KEY } from 'src/common/decorators/public.decorators';
+import { IS_BASIC_AUTH_KEY, IS_PUBLIC_KEY } from 'src/common/decorators/public.decorators';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -24,6 +24,14 @@ export class AuthGuard implements CanActivate {
     if (isPublic) {
       // 💡 See this condition
       return true;
+    }
+
+    const isBasicAuth = this.reflector.getAllAndOverride<boolean>(IS_BASIC_AUTH_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isBasicAuth) {
+      return this.handleBasicAuth(context);
     }
 
     const request = context.switchToHttp().getRequest();
@@ -42,6 +50,27 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     return true;
+  }
+
+  private handleBasicAuth(context: ExecutionContext): boolean | PromiseLike<boolean> {
+    const request = context.switchToHttp().getRequest();
+    const auth = request.headers.authorization;
+    if (!auth) {
+      throw new UnauthorizedException();
+    }
+
+    const [username, password] = Buffer.from(auth.split(' ')[1], 'base64')
+      .toString()
+      .split(':');
+
+    if (
+      process.env.HTTP_BASIC_USER === username &&
+      process.env.HTTP_BASIC_PASSWORD === password
+    ) {
+      return true;
+    }
+
+    throw new UnauthorizedException();
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
