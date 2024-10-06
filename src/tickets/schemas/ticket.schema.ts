@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { Event } from 'src/events/schemas/event.schema';
 
 export type TicketDocument = HydratedDocument<Ticket>;
 
@@ -33,3 +34,16 @@ export class Ticket {
 }
 
 export const TicketSchema = SchemaFactory.createForClass(Ticket);
+
+TicketSchema.virtual('event', {
+  ref: 'Event',
+  localField: 'eventId',
+  foreignField: 'eventId',
+  justOne: true,
+});
+TicketSchema.set('toJSON', {
+  virtuals: true,
+});
+TicketSchema.set('toObject', {
+  virtuals: true,
+});

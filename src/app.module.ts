@@ -20,7 +20,7 @@ import { IpfsModule } from './ipfs/ipfs.module';
       connectionFactory: (connection) => {
         connection.plugin(require('mongoose-autopopulate'));
         return connection;
-      }
+      },
     }),
     EventsModule,
     TicketsModule,

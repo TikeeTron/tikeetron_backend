@@ -61,6 +61,7 @@ export class TicketsService {
       .sort(query.order == Order.ASC ? 'createdAt' : '-createdAt')
       .skip(query.skip)
       .limit(query.take)
+      .populate('event')
       .exec();
 
     return new PageDto<Ticket>(data, query.page, query.take, itemCount);
