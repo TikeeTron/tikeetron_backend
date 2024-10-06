@@ -1,45 +1,42 @@
-name: Deploy to Production
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI env DEV
 
 on:
   push:
-    tags:
-      - 'v*'  # Triggers on tags that start with "v" (e.g., v1.0, v1.0.0)
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  build-and-deploy:
+  build:
+    name: Build and Push to Registry
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Check out the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Connect to DockerHub
+        uses: docker/login-action@v3
         with:
-          node-version: '18'
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
-      # Step 3: Install dependencies
-      - name: Install dependencies
-        run: npm install
-
-      # Step 4: Build the application
-      - name: Build the application
-        run: npm run build
-
-      # Step 5: Log in to the DigitalOcean Droplet using SSH
-      - name: Deploy to DigitalOcean Droplet
-        uses: appleboy/ssh-action@v0.1.3
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v5
         with:
-          host: ${{ secrets.DROPLET_IP }}
-          username: ${{ secrets.DROPLET_USER }}
-          key: ${{ secrets.DROPLET_SSH_KEY }}
-          port: 22
-          script: |
-            cd /home/tikeetron_backend
-            git pull origin main
-            docker build -t nestjs-app .
-            docker stop nestjs-app || true
-            docker rm nestjs-app || true
-            docker run -d -p 3000:3000 --name nestjs-app nestjs-app
+          push: true
+          tags: farrellh/tikeetron-api:latest
+          file: ./Dockerfile
+          platforms: linux/amd64
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}

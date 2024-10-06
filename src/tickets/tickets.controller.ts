@@ -1,4 +1,4 @@
-import {
+ import {
   Controller,
   Get,
   Post,
@@ -12,6 +12,7 @@ import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { QueryTicketsDto } from './dto/query-tickets.dto';
+import { BasicAuth } from 'src/common/decorators';
 
 @ApiTags('tickets')
 @ApiBearerAuth()
@@ -155,6 +156,7 @@ export class TicketsController {
       },
     },
   })
+  @BasicAuth()
   async findAll(@Query() query: QueryTicketsDto) {
     return await this.ticketsService.findAll(query);
   }
