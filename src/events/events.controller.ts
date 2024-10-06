@@ -13,12 +13,13 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Event } from './schemas/event.schema';
 import { QueryEventDto } from './dto/query-event.dto';
+import { BasicAuth } from 'src/common/decorators';
 
 @ApiTags('events')
 @ApiBearerAuth()
 @Controller('events')
 export class EventsController {
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(private readonly eventsService: EventsService) { }
 
   @Post()
   @ApiCreatedResponse({ type: Event })
@@ -71,6 +72,7 @@ export class EventsController {
       },
     },
   })
+  @BasicAuth()
   async findAll(@Query() query: QueryEventDto) {
     return await this.eventsService.findAll(query);
   }
