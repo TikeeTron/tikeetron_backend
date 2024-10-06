@@ -23,9 +23,7 @@ export class OrganizersService {
   async update(address: string, updateOrganizerDto: UpdateOrganizerDto) {
     return await this.model.findOneAndUpdate(
       {
-        where: {
-          address,
-        },
+        address,
       },
       {
         name: updateOrganizerDto.name,
